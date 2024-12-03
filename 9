@@ -1,0 +1,14 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Lesson2 {
+    public static void main(String[] args) {
+        //9
+        leapYearCheck(800);
+    }
+    //9
+    public static void leapYearCheck(int yearNumber) {
+        boolean leap = (yearNumber % 4 == 0 && yearNumber % 100 !=0) || (yearNumber % 400 == 0);
+        System.out.println(leap);
+    }
+}
