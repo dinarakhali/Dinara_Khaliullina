@@ -1,1 +1,1 @@
-# Dinara's project
+# Dinara's project for homework
