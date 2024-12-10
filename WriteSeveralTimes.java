@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Lesson2 {
+public class WriteSeveralTimes{
     public static void main(String[] args) {
         //8
         writeSeveralTimes("Это предложение, которое будет печатьтся.", 3);
