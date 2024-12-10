@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Lesson2 {
+public class CompareNumbers{
     public static void main(String[] args) {
         //4
         compareNumbers();
