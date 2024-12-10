@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Lesson2 {
+public class LeapYearCheck{
     public static void main(String[] args) {
         //9
         boolean leapYear = leapYearCheck(800);
