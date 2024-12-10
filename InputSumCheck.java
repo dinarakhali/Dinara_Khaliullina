@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Lesson2 {
+public class InputSumCheck{
     public static void main(String[] args) {
         //5
         boolean checkResult = inputSumCheck();
