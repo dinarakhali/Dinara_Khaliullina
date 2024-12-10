@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Lesson2 {
+public class ArrCreate{
     public static void main(String[] args) {
         //14
         int[] resultArr = arrCreate(5, 3);
