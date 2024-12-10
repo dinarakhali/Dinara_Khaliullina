@@ -23,14 +23,15 @@ public class Lesson2 {
         positiveOrNegativeNumber(-8);
         System.out.println();
         //7
-        trueFalseCheck(-8);
+        boolean result = trueFalseCheck(10);
+        System.out.println(result);
         System.out.println();
         //8
         writeSeveralTimes("Это предложение, которое будет печатьтся.", 3);
         System.out.println();
         //9
-        leapYearCheck(800);
-        System.out.println();
+        boolean leapYear = leapYearCheck(800);
+        System.out.println(leapYear + "\n");
         //10
         arrayInv();
         System.out.println();
@@ -44,8 +45,8 @@ public class Lesson2 {
         setOne();
         System.out.println();
         //14
-        int[] result = arrCreate(5, 3);
-        System.out.println(Arrays.toString(result));
+        int[] resultArr = arrCreate(5, 3);
+        System.out.println(Arrays.toString(resultArr));
     }
     //1
     public static void printThreeWords () {
@@ -111,9 +112,9 @@ public class Lesson2 {
         }
     }
     //7
-    public static void trueFalseCheck(int number) {
+    public static boolean trueFalseCheck(int number) {
         boolean checking = number < 0;
-        System.out.println(checking);
+        return checking;
     }
     //8
     public static void writeSeveralTimes(String sentence, int number) {
@@ -122,9 +123,9 @@ public class Lesson2 {
         }
     }
     //9
-    public static void leapYearCheck(int yearNumber) {
-        boolean leap = (yearNumber % 4 == 0 && yearNumber % 100 !=0) || (yearNumber % 400 == 0);
-        System.out.println(leap);
+    public static boolean leapYearCheck(int yearNumber) {
+        boolean leap = (yearNumber % 4 == 0 && yearNumber % 100 != 0) || (yearNumber % 400 == 0);
+        return leap;
     }
     //10
     public static void arrayInv() {
