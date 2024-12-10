@@ -4,8 +4,8 @@ import java.util.Scanner;
 public class Lesson2 {
     public static void main(String[] args) {
         //14
-        int[] result = arrCreate(5, 3);
-        System.out.println(Arrays.toString(result));
+        int[] resultArr = arrCreate(5, 3);
+        System.out.println(Arrays.toString(resultArr));
     }
     //14
     public static int[] arrCreate(int len, int initialValue) {
