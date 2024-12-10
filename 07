@@ -4,11 +4,12 @@ import java.util.Scanner;
 public class Lesson2 {
     public static void main(String[] args) {
         //7
-        trueFalseCheck(-8);
+        boolean result = trueFalseCheck(10);
+        System.out.println(result);
     }
     //7
-    public static void trueFalseCheck(int number) {
+    public static boolean trueFalseCheck(int number) {
         boolean checking = number < 0;
-        System.out.println(checking);
+        return checking;
     }
 }
