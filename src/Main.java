@@ -42,7 +42,7 @@ public class Main {
                 "88003000600",
                 100000,
                 21);
-        for(PersonNew i : person){
+        for(PersonNew i : person) {
             i.printPersonNew();
         }
     }
