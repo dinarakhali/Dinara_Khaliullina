@@ -9,7 +9,6 @@ public class LeapYearCheck{
     }
     //9
     public static boolean leapYearCheck(int yearNumber) {
-        boolean leap = (yearNumber % 4 == 0 && yearNumber % 100 !=0) || (yearNumber % 400 == 0);
-        return leap;
+        return (yearNumber % 4 == 0 && yearNumber % 100 !=0) || (yearNumber % 400 == 0);
     }
 }
