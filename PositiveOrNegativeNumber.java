@@ -8,8 +8,7 @@ public class PositiveOrNegativeNumber{
     }
     //6
     public static void positiveOrNegativeNumber(int number) {
-        boolean posOrNeg = number >= 0;
-        if (posOrNeg) {
+        if (number >= 0) {
             System.out.println("Число положительное");
         }
         else {
