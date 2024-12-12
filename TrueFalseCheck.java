@@ -9,7 +9,6 @@ public class TrueFalseCheck{
     }
     //7
     public static boolean trueFalseCheck(int number) {
-        boolean checking = number < 0;
-        return checking;
+        return number < 0;
     }
 }
