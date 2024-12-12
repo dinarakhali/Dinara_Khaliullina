@@ -9,15 +9,6 @@ class Attraction {
         this.time = time;
         this.price = price;
         }
-    public String getName() {
-        return name;
-    }
-    public String getTime() {
-        return time;
-    }
-    public int getPrice() {
-        return price;
-    }
     public void printAttraction() {
         System.out.println("Название: " + name + "\nВремя работы: " + time + "\nСтоимость: " + price + "\n");
     }
