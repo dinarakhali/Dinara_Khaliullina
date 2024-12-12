@@ -17,7 +17,6 @@ public class InputSumCheck{
         System.out.println("Введите еще одно целое число");
         int b = inputSecond.nextInt();
 
-        boolean checking = a + b >= 10 && a + b <=20;
-        return checking;
+        return a + b >= 10 && a + b <=20;
     }
 }
