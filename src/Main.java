@@ -28,5 +28,15 @@ public class Main {
         }
 
         bowl1.addFood(41);
+
+        //2 задание:
+
+        Circle circle = new Circle("Круг.", "красный", "черный", 10);
+        Rectangle rectangle = new Rectangle("Прямоугольник.", "синий", "белый", 15, 4);
+        Triangle triangle = new Triangle("Треугольник.", "зеленый", "желтый", 16, 10, 11);
+
+        circle.printDetails();
+        rectangle.printDetails();
+        triangle.printDetails();
     }
 }

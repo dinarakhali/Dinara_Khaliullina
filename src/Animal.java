@@ -1,4 +1,4 @@
-public class Animal {
+public abstract class Animal {
     private String name;
     private int runLimit;
     private int swimLimit;
@@ -33,7 +33,7 @@ public class Animal {
         }
     }
 
-    public static int getAnimalCount(){
+    public static int getAnimalCount() {
         return animalCount;
     }
 }
