@@ -1,16 +1,9 @@
 public class Main {
     public static void main(String[] args) {
-        String[][] array = {
-                {"1", "10", "Елка", ":)"},
-                {"Снег", "20", "3", "2"},
-                {"2", "2", "2", "2"},
-                {"1", "1", "1", "1"}
-        };
-        String[][] wrongSizeArray = {
-                {"1", "10", "3"},
-                {"20", "3", "2"}
-        };
+        String[][] array = {{"1", "10", "Елка", ":)"}, {"Снег", "20", "3", "2"}, {"2", "2", "2", "2"}, {"1", "1", "1", "1"}};
+        String[][] wrongSizeArray = {{"1", "10", "3"}, {"20", "3", "2"}};
         printArray(array);
+        System.out.println();
         printArray(wrongSizeArray);
     }
 
