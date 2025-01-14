@@ -2,14 +2,16 @@ public class Main {
     public static void main(String[] args) {
         String[][] array = {{"1", "10", "Елка", ":)"}, {"Снег", "20", "3", "2"}, {"2", "2", "2", "2"}, {"1", "1", "1", "1"}};
         String[][] wrongSizeArray = {{"1", "10", "3"}, {"20", "3", "2"}};
-        printArray(array);
-        System.out.println();
-        printArray(wrongSizeArray);
-    }
 
-    public static void printArray(String[][] array) {
         try {
             int summ = transformArray(array);
+            System.out.println("Сумма элементов массива = " + summ + "\n");
+        } catch (MyArraySizeException e) {
+            System.err.println("Ошибка: " + e.getMessage());
+        }
+
+        try {
+            int summ = transformArray(wrongSizeArray);
             System.out.println("Сумма элементов массива = " + summ + "\n");
         } catch (MyArraySizeException e) {
             System.err.println("Ошибка: " + e.getMessage());
