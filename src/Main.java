@@ -18,38 +18,33 @@ public class Main {
         try {
             int summ = transformArray(array);
             System.out.println("Сумма элементов массива = " + summ + "\n");
-        } catch (MyArraySizeException e) {
-            System.err.println(e.getMessage());
-        } catch (MyArrayDataException e) {
+        } catch (MyArraySizeException | MyArrayDataException e) {
             System.err.println(e.getMessage());
         }
 
         try {
             int summ = transformArray(wrongSizeArray);
             System.out.println("Сумма элементов массива = " + summ + "\n");
-        } catch (MyArraySizeException e) {
-            System.err.println(e.getMessage());
-        } catch (MyArrayDataException e) {
+        } catch (MyArraySizeException | MyArrayDataException e) {
             System.err.println(e.getMessage());
         }
 
         try {
             int summ = transformArray(rightArray);
             System.out.println("Сумма элементов массива = " + summ + "\n");
-        } catch (MyArraySizeException e) {
-            System.err.println(e.getMessage());
-        } catch (MyArrayDataException e) {
+        } catch (MyArraySizeException | MyArrayDataException e) {
             System.err.println(e.getMessage());
         }
     }
 
     public static int transformArray(String[][] array) throws MyArraySizeException, MyArrayDataException {
+        String incorrectSizeMessage = "Ошибка: Массив должен быть размером 4x4.";
         if (array.length != 4) {
-            throw new MyArraySizeException("Ошибка: Массив должен быть размером 4x4.");
+            throw new MyArraySizeException(incorrectSizeMessage);
         }
         for (String[] row : array) {
             if (row.length != 4) {
-                throw new MyArraySizeException("Ошибка: Массив должен быть размером 4x4.");
+                throw new MyArraySizeException(incorrectSizeMessage);
             }
         }
 
