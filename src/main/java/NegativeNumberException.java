@@ -1,4 +1,5 @@
-package PACKAGE_NAME;
-
-public class NegativeNumberException {
+public class NegativeNumberException extends Exception {
+    public NegativeNumberException(String message) {
+        super(message);
+    }
 }
