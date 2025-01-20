@@ -45,9 +45,11 @@ public class Main {
         phoneBook.add("Ivanov", 555228);
         phoneBook.add("Sidorov", 555229);
         phoneBook.add("Ivanov", 555230);
+        phoneBook.add("Sidorov", 555224);
 
         phoneBook.get("Petrov");
         phoneBook.get("Ivanov");
+        phoneBook.get("Sidorov");
         phoneBook.get("Pushkin");
     }
 }
