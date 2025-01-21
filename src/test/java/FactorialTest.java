@@ -6,27 +6,34 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FactorialTest {
 
     @Test
-    @DisplayName("Тестирование факториала - эквивалентное разбиение и границы для int.")
+    @DisplayName("Тестирование факториала - эквивалентное разбиение и границы для long.")
 
     public void factorialTest() throws NegativeNumberException, BigNumberException {
-        assertEquals(40320, Factorial.getFactorial(8));
-        assertEquals(1, Factorial.getFactorial(0));
-        assertEquals(1, Factorial.getFactorial(1));
-        assertEquals(2004189184, Factorial.getFactorial(16));
+        assertAll(
+                () -> assertEquals(40320L, Factorial.getFactorial(8)),
+                () -> assertEquals(1L, Factorial.getFactorial(0)),
+                () -> assertEquals(1L, Factorial.getFactorial(1)),
+                () -> assertEquals(2432902008176640000L, Factorial.getFactorial(20))
+        );
     }
 
     @Test
-    @DisplayName("Тестирование факториала - исключения.")
+    @DisplayName("Тестирование факториала - исключения отрицательных чисел.")
 
-    public void factorialExcTest() {
+    public void factorialExcNegTest() {
         assertThrows(NegativeNumberException.class, () -> {
             Factorial.getFactorial(-4);
         });
+    }
 
+    @Test
+    @DisplayName("Тестирование факториала - исключения больших чисел.")
+
+    public void factorialExcBigTest() throws BigNumberException, NegativeNumberException {
         try {
-            Factorial.getFactorial(21);
+            Factorial.getFactorial(26);
             fail("Исключение не брошено");
-        } catch (NegativeNumberException | BigNumberException e) {
+        } catch (BigNumberException e) {
         }
     }
 }
