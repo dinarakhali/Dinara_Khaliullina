@@ -96,8 +96,10 @@ public class ReplenishmentTest {
         link.click();
         clickCookies();
 
-        assertTrue(driver.getTitle().contains("Порядок оплаты и безопасность интернет платежей"),
-                "Ссылка 'О сервисе' НЕ работает");
+        WebElement content = new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//h3[contains(text(),'Оплата банковской картой')]")));
+        assertTrue(content.isDisplayed());
     }
 
     @Test
