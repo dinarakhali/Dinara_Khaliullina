@@ -1,18 +1,31 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class ReplenishmentTest {
-    private WebDriver driver;
+    private static WebDriver driver;
+    private WebDriverWait wait;
+
+    //Метод для куки
+    private void clickCookies() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement cookieButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cookie-agree")));
+            cookieButton.click();
+        } catch (TimeoutException | ElementNotInteractableException e) {
+        }
+    }
 
     @BeforeAll
     public static void setDriver() {
@@ -24,113 +37,92 @@ public class ReplenishmentTest {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        //Открыть сайт и принять куки
+        driver.get("https://www.mts.by/");
+        clickCookies();
+    }
+
+    @AfterEach
+    public void closeDriver() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    @AfterAll
+    public static void exitDriver() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @Test
+    @DisplayName("1. Тест названия блока")
+
     public void replenishmentTest() {
-        // 1. Открыть сайт
-        driver.get("https://www.mts.by/");
-        System.out.println("1. Сайт открыт.");
-
-        //Если появится куки
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            WebElement cookieButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cookie-agree")));
-            cookieButton.click();
-            System.out.println("* Куки принято. \n---");
-        } catch (TimeoutException | ElementNotInteractableException e) {
-            System.out.println("* Куки не запрашиваются. \n---");
-        }
-
-        // 2. Проверить работу ссылки "О сервисе"
-        WebElement conditionsLink = driver.findElement(By.xpath("//a[text()='Подробнее о сервисе']"));
-        conditionsLink.click();
-
-        //Если появится куки
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            WebElement cookieButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cookie-agree")));
-            cookieButton.click();
-            System.out.println("* Куки принято.");
-        } catch (TimeoutException | ElementNotInteractableException e) {
-            System.out.println("* Куки не запрашиваются.");
-        }
-
-        if (driver.getTitle().contains("Порядок оплаты и безопасность интернет платежей")) {
-            System.out.println("2. Ссылка 'Подробнее о сервисе' работает. \n---");
-        } else {
-            System.out.println("2. Ссылка 'Подробнее о сервисе' НЕ работает. \n---");
-        }
-        driver.navigate().back();
-
-        //Если появится куки
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            WebElement cookieButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cookie-agree")));
-            cookieButton.click();
-            System.out.println("* Куки принято.");
-        } catch (TimeoutException | ElementNotInteractableException e) {
-            System.out.println("* Куки не запрашиваются.");
-        }
-
-        // 3. Найти блок "Пополнение"
+        //Найти блок "Пополнение"
         WebElement replBlock = driver.findElement(By.xpath("//*[@class='pay']"));
+        assertTrue(replBlock.isDisplayed(), "Блока пополнение НЕТ.");
 
-        if (replBlock.isDisplayed()) {
-            System.out.println("3. Блок 'Пополнение' найден.");
-        } else {
-            System.out.println("3. Блок 'Пополнение' НЕ найден.");
-            return;
-        }
-
-        // 4. Проверить название блока
+        //Проверить название блока
         WebElement blockTitle = replBlock.findElement(By.xpath("//h2[contains(text(), 'Онлайн пополнение')]"));
         String actualTitle = blockTitle.getText().replace("\n", " ").trim();
         String expectedTitle = "Онлайн пополнение без комиссии";
+        assertEquals(expectedTitle, actualTitle, "Название блока НЕ правильное");
+    }
 
-        if (actualTitle.equals(expectedTitle)) {
-            System.out.println("4. Название блока верное.");
-        } else {
-            System.out.println("4. Название блока НЕ совпадает. Ожидалось: " + expectedTitle + ", Получено: " + actualTitle + ".");
+    @Test
+    @DisplayName("2. Тест наличия логотипов платежных систем")
+    public void logoTest() {
+        List<String> logosXpaths = List.of(
+                "//img[@alt='Visa']",
+                "//img[@alt='Verified By Visa']",
+                "//img[@alt='MasterCard']",
+                "//img[@alt='MasterCard Secure Code']",
+                "//img[@alt='Белкарт']"
+        );
+
+        for (String locator : logosXpaths) {
+            WebElement logo = driver.findElement(By.xpath(locator));
+            assertTrue(logo.isDisplayed(), "Логотипа с XPath: " + locator + " НЕТ");
         }
+    }
 
-        // 5. Проверить наличие логотипов платежных систем
-        WebElement logo1 = replBlock.findElement(By.xpath("//img[@alt='Visa']"));
-        WebElement logo2 = replBlock.findElement(By.xpath("//img[@alt='Verified By Visa']"));
-        WebElement logo3 = replBlock.findElement(By.xpath("//img[@alt='MasterCard']"));
-        WebElement logo4 = replBlock.findElement(By.xpath("//img[@alt='MasterCard Secure Code']"));
-        WebElement logo5 = replBlock.findElement(By.xpath("//img[@alt='Белкарт']"));
+    @Test
+    @DisplayName("3. Тест ссылки 'О сервисе'")
+    public void linkTest() {
+        WebElement link = driver.findElement(By.xpath("//a[text()='Подробнее о сервисе']"));
+        link.click();
+        clickCookies();
 
-        if (logo1.isDisplayed() && logo2.isDisplayed() && logo3.isDisplayed() && logo4.isDisplayed() && logo5.isDisplayed()) {
-            System.out.println("5. Логотипы найдены.");
-        } else {
-            System.out.println("5. Логотипы НЕ найдены.");
-        }
+        assertTrue(driver.getTitle().contains("Порядок оплаты и безопасность интернет платежей"),
+                "Ссылка 'О сервисе' НЕ работает");
+    }
 
-        // 6. Ввести номер телефона в поле
+    @Test
+    @DisplayName("4. Тест кнопки 'Продолжить'")
+    public void continueButtonTest() {
+        //Ввести номер телефона
         WebElement phoneField = driver.findElement(By.id("connection-phone"));
         phoneField.sendKeys("297777777");
-        System.out.println("6. Номер телефона введён.");
 
-        // 7. Ввести сумму в поле
+        //Ввести сумму
         WebElement amountField = driver.findElement(By.id("connection-sum"));
         amountField.sendKeys("20");
-        System.out.println("7. Сумма введена.");
 
-        // 8. Проверить работу кнопки "Отправить"
         WebElement submitButton = driver.findElement(By.xpath("//*[@id='pay-connection']//button[text()='Продолжить']"));
         submitButton.click();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        //Проверить проклятый iframe
         try {
-            WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//iframe[contains(@class, 'bepaid-iframe')]")));
-            System.out.println("8. iFrame появился. Кнопка работает. \n---");
+            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[contains(@class, 'bepaid-iframe')]")));
+            WebElement iframeContent = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+            assertTrue(iframeContent.isDisplayed(), "iFrame НЕ появился. Кнопка НЕ работает.");
         } catch (TimeoutException e) {
-            System.out.println("8. iFrame НЕ появился. Кнопка НЕ работает. \n---");
+            Assertions.fail("iFrame НЕ появился.");
+        } finally {
+            driver.switchTo().defaultContent();
         }
-
-        //Закрыть браузер и завершить работу драйвера.
-        driver.quit();
-        System.out.println("* Браузер закрыт.");
     }
 }
