@@ -5,84 +5,94 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 
 public class MtsPaymentPage {
     private WebDriver driver;
 
     //Локаторы внутри фрейма
-    private By iframe = By.cssSelector(".bepaid-iframe");
-
-    private By cardNumberField = By.xpath("//label[contains(text(), 'Номер карты')]");
-    private By dateField = By.xpath("//label[contains(text(), 'Срок действия')]");
-    private By cvcField = By.xpath("//label[contains(text(), 'CVC')]");
-    private By cardHolderField = By.xpath("//label[contains(text(), 'Имя держателя (как на карте)')]");
+    private By cardNumberField = By.xpath("//input[@formcontrolname='creditCard']");
+    private By dateField = By.xpath("//input[@formcontrolname='expirationDate']");
+    private By cvcField = By.xpath("//input[@formcontrolname='cvc']");
+    private By cardHolderField = By.xpath("//input[@formcontrolname='holder']");
 
     private By phoneNumber = By.xpath("//span[contains(text(), 'Номер:') and contains(text(), '375297777777')]");
-    private By paymentHeader = By.xpath("//span[contains(text(), 'Оплата:')]");
-
-    // Локатор для суммы на кнопке
+    private By paymentHeader = By.cssSelector("app-payment-container .pay-description__cost");
     private By payButton = By.xpath("//button[contains(text(), 'Оплатить')]");
+
+    private List<By> logos = List.of(
+            By.cssSelector("img[src*='visa-system.svg']"),
+            By.cssSelector("img[src*='mastercard-system.svg']"),
+            By.cssSelector("img[src*='belkart-system.svg']"),
+            By.cssSelector("img[src*='mir-system-ru.svg']")
+    );
 
     //Конструктор
     public MtsPaymentPage(WebDriver driver) {
         this.driver = driver;
     }
 
-    // Метод для проверки текста подсказки в поле ввода
-    public String getPlaceholderText(By field) {
-        return driver.findElement(field).getAttribute("placeholder");
+    //Геттеры для локаторов (текст)
+    public By getPaymentHeader() {
+        return paymentHeader;
     }
 
-    // Проверка текста подсказки для "Номер карты"
-    public String getCardNumberLabelTextWithJs() {
+    public By getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public By getPayButton() {
+        return payButton;
+    }
+
+    //Геттеры для локаторов полей данных карт
+    public By getCardNumberField() {
+        return cardNumberField;
+    }
+
+    public By getDateField() {
+        return dateField;
+    }
+
+    public By getCvcField() {
+        return cvcField;
+    }
+
+    public By getCardHolderField() {
+        return cardHolderField;
+    }
+
+    // Проверка в полях банк.карты в iFrame
+    public String getLabelText(By locator) {
+        WebElement inputField = driver.findElement(locator);
+        WebElement label = inputField.findElement(By.xpath("./following-sibling::label"));
+        return label.getText();
+    }
+
+    // Проверка текста подсказки в iFrame
+    public String getTextJs(By locator) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        WebElement element = driver.findElement(cardNumberField);
-        String text = (String) js.executeScript("return arguments[0].textContent;", element); // Приводим к строке
+        WebElement element = driver.findElement(locator);
+        String text = (String) js.executeScript("return arguments[0].innerText;", element);
         return text.trim();
     }
 
-    //public String getCardNumberPlaceholder() {
-    //    return getPlaceholderText(cardNumberField);
-    //}
-
-    // Проверка текста подсказки для "Дата окончания карты"
-    public String getExpirationDatePlaceholder() {
-        return getPlaceholderText(dateField);
-    }
-
-    // Проверка текста подсказки для "CVC"
-    public String getCvcPlaceholder() {
-        return getPlaceholderText(cvcField);
-    }
-
-    // Проверка текста подсказки для "Имя держателя карты"
-    public String getCardHolderPlaceholder() {
-        return getPlaceholderText(cardHolderField);
-    }
-
-    // Проверка текста заголовка с суммой
-    public String getPaymentHeaderText() {
-        return driver.findElement(paymentHeader).getText();
-    }
-
-    // Проверка номера телефона в заголовке
-    public String getPhoneNumberText() {
-        return driver.findElement(phoneNumber).getText();
-    }
-
-    // Проверка текста на кнопке оплаты
-    public String getPayButtonText() {
-        return driver.findElement(payButton).getText().trim();
-    }
-
-    // Переключение в iframe
-    public void switchToIframe() {
-        WebElement iframe = driver.findElement(By.cssSelector("iframe.bepaid-iframe")); // Локатор для iframe
-        driver.switchTo().frame(iframe);
-    }
-
-    // Возврат в основной контекст
-    public void switchToDefaultContent() {
+    public boolean isLogoDisplayed() {
+        for (By locator : logos) {
+            try {
+                WebElement logo = driver.findElement(locator);
+                if (!logo.isDisplayed()) {
+                    System.out.println("Логотип НЕ найден: " + locator);
+                    return false;
+                }
+            } catch (NoSuchElementException e) {
+                System.out.println("Логотип НЕ найден: " + locator);
+                return false;
+            }
+        }
         driver.switchTo().defaultContent();
+        return true;
     }
 }
