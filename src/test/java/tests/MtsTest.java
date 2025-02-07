@@ -22,9 +22,8 @@ public class MtsTest {
 
     private WebDriver driver;
     private WebDriverWait wait;
-    MtsPage page;
-    MtsPaymentPage paymentPage;
-    JavascriptExecutor js;
+    private MtsPage page;
+    private MtsPaymentPage paymentPage;
 
     @Step("{0}") // Метод для логирования шагов
     private void step(String message) {
@@ -43,9 +42,8 @@ public class MtsTest {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-        page = new MtsPage(driver);
-        paymentPage = new MtsPaymentPage(driver);
-        js = (JavascriptExecutor) driver;
+        this.page = new MtsPage(driver);
+        this.paymentPage = new MtsPaymentPage(driver);
 
         step("Открываем сайт и принимаем куки");
         driver.get("https://www.mts.by/");
@@ -94,8 +92,6 @@ public class MtsTest {
         step("Находим и кликаем по ссылке");
         By blockLink = page.getBlockLink();
         page.click(blockLink);
-        step("Принимаем куки при появлении");
-        page.acceptCookies();
         step("Проверяем title открывшейся страницы");
         assertTrue(page.isCorrectTitleOfLink(), "Ссылка НЕ работает");
     }

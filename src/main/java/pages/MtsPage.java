@@ -31,6 +31,7 @@ public class MtsPage {
             "//img[@alt='MasterCard Secure Code']",
             "//img[@alt='Белкарт']"
     );
+    private By allLogos = By.cssSelector(".pay__partners ul li");
     //Мапа для плейсхолдеров
     Map<String, By> fieldLocators = new HashMap<>();
     Map<String, String> expectedPlaceholders = new HashMap<>();
@@ -111,10 +112,16 @@ public class MtsPage {
 
     //Метод проверки наличия логотипов.
     public boolean isLogosDisplayed() {
-        for (String locator : logos) {
-            WebElement logo = driver.findElement(By.xpath(locator));
+        List<WebElement> logos = driver.findElements(allLogos);
+
+        if (logos.size() != 5) {
+            System.out.println("Ожидалось 5 логотипов, но найдено: " + logos.size());
+            return false;
+        }
+
+        for (WebElement logo : logos) {
             if (!logo.isDisplayed()) {
-                System.out.println("Логотип с XPath " + locator + " НЕ найден");
+                System.out.println("Один из логотипов НЕ отображается");
                 return false;
             }
         }
@@ -142,15 +149,9 @@ public class MtsPage {
 
     //Метод проверки, что кнопка "Продолжить" работает.
     public boolean isIframeDisplayed() {
-        try {
-            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iframe));
-            WebElement iframeContent = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-            return iframeContent.isDisplayed();
-        } catch (TimeoutException e) {
-            return false;
-        } finally {
-            driver.switchTo().defaultContent();
-        }
+        boolean isDisplayed = wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[contains(@class, 'bepaid-iframe')]"))) != null;
+        driver.switchTo().defaultContent();
+        return isDisplayed;
     }
 
     // Метод выбора пункта в выпадающем списке
